@@ -23,6 +23,9 @@ brew install kustomize
 kubectl create namespace argocd
 kubectl -n argocd apply -k ./rendered/argocd/overlays/dev # <- it doesn't create an external ingress
 
+# Install the NGINX ingress
+kubectl -n argocd apply -k ./rendered/ingress-nginx
+
 # Install Argo CD CLI
 brew install argocd
 
