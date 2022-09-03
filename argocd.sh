@@ -44,3 +44,6 @@ done
 export PASS=$(kubectl -n argocd get secret argocd-initial-admin-secret --output=jsonpath="{.data.password}" | base64 --decode)
 argocd login argocd.this --insecure --username admin --password $PASS --grpc-web
 argocd account update-password --current-password $PASS --new-password $PASSWORD
+
+# Cleanup
+rm -rf rendered
