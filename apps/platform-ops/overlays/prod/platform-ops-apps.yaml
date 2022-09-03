@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: platform-ops-apps
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/francisco-com-au/platform-ops.git
+      revision: main
+      directories:
+      - path: 'apps/*'
+  template:
+    spec:
+      source:
+        targetRevision: main
+        path: '{{path}}/overlays/prod'
