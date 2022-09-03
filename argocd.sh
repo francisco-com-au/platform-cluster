@@ -21,8 +21,10 @@ brew install kustomize
 
 # Install Argo CD on the cluster
 kubectl create namespace argocd
-kubectl -n argocd apply -k ./rendered/argocd/overlays/$ARGOCD_ENV # <- dev doesn't create an external ingress
+kubectl -n argocd apply -k ./rendered/argocd/overlays/$CLUSTER_ENV # <- dev doesn't create an external ingress
 
+# Install platform ops apps
+kubectl -n argocd apply -k ./rendered/platform-ops/overlays/$CLUSTER_ENV
 
 # Install Argo CD CLI
 brew install argocd
@@ -30,8 +32,8 @@ brew install argocd
 # Wait for the Server to be up
 kubectl -n argocd rollout status deployment argocd-server
 
-# Install the NGINX ingress controller
-kubectl apply -k ./rendered/ingress-nginx
+# # Install the NGINX ingress controller
+# kubectl apply -k ./rendered/ingress-nginx
 
 # Wait for nginx to be up
 until kubectl -n ingress-nginx rollout status deployment ingress-nginx-controller; do

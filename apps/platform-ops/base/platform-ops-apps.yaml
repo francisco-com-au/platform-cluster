@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: platform-ops-apps
+  namespace: argocd
+  # finalizers:
+  #   - resources-finalizer.argocd.argoproj.io
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/francisco-com-au/platform-ops.git
+      revision: main
+      directories:
+      - path: 'apps/*'
+  template:
+    metadata:
+      name: '{{path.basename}}'
+    spec:
+      project: platform-ops
+      source:
+        repoURL: https://github.com/francisco-com-au/platform-ops.git
+        targetRevision: main
+        path: '{{path.basename}}/overlays/prod'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: argocd
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+        syncOptions:
+        - CreateNamespace=true
