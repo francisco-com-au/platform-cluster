@@ -22,7 +22,7 @@ spec:
       source:
         repoURL: https://github.com/${apps_repo}.git
         targetRevision: ${branch}
-        path: '{{path.basename}}/overlays/${env}'
+        path: '{{path}}/overlays/${env}'
       destination:
         server: https://kubernetes.default.svc
         namespace: argocd

@@ -8,7 +8,7 @@ In a nutshell, this will point to the [Platform Apps](https://github.com/francis
 
 # How do I use it?
 Run `./main.sh <environment_name>`. It will:
-- create a local cluster using ['K3D'](https://k3d.io/v5.4.6/) ([`k3s`](https://github.com/k3s-io/k3s) in [`docker`](https://www.docker.com/) which works great for forwarding traffic)
+- create a local cluster using [`K3D`](https://k3d.io/v5.4.6/) ([`k3s`](https://github.com/k3s-io/k3s) in [`docker`](https://www.docker.com/) which works great for forwarding traffic)
 - install [`ArgoCD`](https://argo-cd.readthedocs.io/en/stable/)
 - configure [`ArgoCD`](https://argo-cd.readthedocs.io/en/stable/) to watch the [`Platform Apps`](https://github.com/francisco-com-au/platform-apps) repo on specific overlays based on the environment.
 

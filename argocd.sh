@@ -23,8 +23,6 @@ brew install kustomize
 kubectl create namespace argocd
 kubectl -n argocd apply -k ./rendered/argocd/overlays/dev # <- it doesn't create an external ingress
 
-# Install the NGINX ingress
-kubectl -n argocd apply -k ./rendered/ingress-nginx
 
 # Install Argo CD CLI
 brew install argocd
@@ -32,13 +30,16 @@ brew install argocd
 # Wait for the Server to be up
 kubectl -n argocd rollout status deployment argocd-server
 
-# Initialise projects and apps
-kubectl -n argocd apply -f ./rendered/platform-apps
+# Install the NGINX ingress controller
+kubectl apply -k ./rendered/ingress-nginx
 
 # Wait for nginx to be up
 until kubectl -n ingress-nginx rollout status deployment ingress-nginx-controller; do
     sleep 5
 done
+
+# Initialise projects and apps
+kubectl -n argocd apply -f ./rendered/platform-apps
 
 # Update admin password (need to configure argocd.this in your host file to point to 127.0.0.1)
 export PASS=$(kubectl -n argocd get secret argocd-initial-admin-secret --output=jsonpath="{.data.password}" | base64 --decode)
