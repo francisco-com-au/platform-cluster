@@ -21,7 +21,7 @@ brew install kustomize
 
 # Install Argo CD on the cluster
 kubectl create namespace argocd
-kubectl -n argocd apply -k ./rendered/argocd/overlays/dev # <- it doesn't create an external ingress
+kubectl -n argocd apply -k ./rendered/argocd/overlays/$ARGOCD_ENV # <- dev doesn't create an external ingress
 
 
 # Install Argo CD CLI

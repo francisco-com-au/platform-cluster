@@ -3,11 +3,13 @@
 set -e
 
 ENVIRONMENT=$1
+ARGOCD_ENV=dev
 if [ "$ENVIRONMENT" == "" ]; then
   # Set the environment depending on the current branch
   branch=$(git rev-parse --abbrev-ref HEAD)
   if [ "$branch" == "main" ]; then
     export ENVIRONMENT=prod
+    export ARGOCD_ENV=prod
   elif [ "$branch" == "develop" ]; then
     export ENVIRONMENT=dev
   else
