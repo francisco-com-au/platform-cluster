@@ -25,7 +25,7 @@ spec:
         path: '{{path}}/overlays/${env}'
       destination:
         server: https://kubernetes.default.svc
-        namespace: argocd
+        namespace: '{{path.basename}}'
       syncPolicy:
         automated:
           selfHeal: true
