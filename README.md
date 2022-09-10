@@ -16,6 +16,9 @@ Run `./main.sh <environment_name>`. It will:
 - install [`ArgoCD`](https://argo-cd.readthedocs.io/en/stable/)
 - configure [`ArgoCD`](https://argo-cd.readthedocs.io/en/stable/) to watch the [`Platform Apps`](https://github.com/francisco-com-au/platform-apps) repo on specific overlays based on the environment.
 
+Run `./load_pull_key.sh`. It will:
+- forge a service account key if not present already
+- inject that service account for every namespace in the cluster
 
 # Dependencies
 - [`homebrew`](https://brew.sh/)
