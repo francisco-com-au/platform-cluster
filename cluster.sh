@@ -15,7 +15,14 @@ function type_minikube() {
 
 function type_k3d() {
     brew install k3d
-    k3d cluster create platform-$ENVIRONMENT --k3s-arg '--no-deploy=traefik@server:*' -p "80:80@loadbalancer" -p "443:443@loadbalancer"
+    # Create registry
+    k3d registry create platform-$ENVIRONMENT.localhost --port 12345
+
+    # Create cluster
+    k3d cluster create \
+        platform-$ENVIRONMENT \
+        --registry-use k3d-platform-$ENVIRONMENT.localhost:12345 \
+        --k3s-arg '--no-deploy=traefik@server:*' -p "80:80@loadbalancer" -p "443:443@loadbalancer"
 }
 
 if [ "$TYPE" == "k3d" ]; then
