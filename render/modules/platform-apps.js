@@ -13,7 +13,7 @@ spec:
       repoURL: https://github.com/${apps_repo}.git
       revision: ${branch}
       directories:
-      - path: 'managed/*'
+      - path: 'managed/apps/*'
   template:
     metadata:
       name: '{{path.basename}}'
