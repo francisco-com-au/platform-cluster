@@ -16,7 +16,7 @@ function type_minikube() {
 function type_k3d() {
     brew install k3d
     # Create registry
-    k3d registry create platform-$ENVIRONMENT.localhost --port 12345
+    k3d registry create platform-$ENVIRONMENT.localhost --port 12345 || echo 'Registry exists'
 
     # Create cluster
     k3d cluster create \

@@ -23,7 +23,7 @@ spec:
         path: '{{path.basename}}/overlays/prod'
       destination:
         server: https://kubernetes.default.svc
-        namespace: argocd
+        namespace: '{{path.basename}}'
       syncPolicy:
         automated:
           selfHeal: true

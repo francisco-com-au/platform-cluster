@@ -32,6 +32,8 @@ spec:
     server: https://kubernetes.default.svc
   - namespace: reloader
     server: https://kubernetes.default.svc
+  - namespace: one-password
+    server: https://kubernetes.default.svc
   clusterResourceWhitelist:
   - group: '*'
     kind: '*'
