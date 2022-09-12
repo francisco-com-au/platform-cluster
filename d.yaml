@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: secret-test
+  namespace: default
+  annotations:
+    reloader.stakater.com/auto: "true"
+    operator.1password.io/item-path: "vaults/automation/items/test"
+    operator.1password.io/item-name: "test"
+spec:
+  selector:
+    matchLabels:
+      app: secret-test
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: secret-test
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "126Mi"
+            limits:
+              cpu: "250m"
+              memory: "126Mi"
