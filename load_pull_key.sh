@@ -19,6 +19,15 @@ auth64=$(echo -n $auth | base64)
 dockerconfigjson="{\"auths\":{\"https://gcr.io\":{\"username\":\"_json_key\",\"password\":\"$escaped_key_content\",\"auth\":\"$auth64\"}}}"
 echo $dockerconfigjson > .dockerconfigjson
 
+# Well that doesn't work for whatever reason (secret gets created but fails to authenticate with GCR).
+# Let's just use kube to create a secret, read the values and then write those values to 1Password.
+kubectl -n default create secret docker-registry tmp \
+    --docker-server=https://gcr.io \
+    --docker-username=_json_key \
+    --docker-password="$(cat ./$FILE_NAME)"
+kubectl -n default get secret tmp --output="jsonpath={.data.\.dockerconfigjson}" | base64 --decode > .dockerconfigjson
+kubectl -n default delete secret tmp
+
 # Load key into 1password
 secret_name="tf.ops.cicd.gcr.pull"
 vault="automation"
