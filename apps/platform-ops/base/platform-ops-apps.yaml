@@ -20,7 +20,7 @@ spec:
       source:
         repoURL: https://github.com/francisco-com-au/platform-ops.git
         targetRevision: main
-        path: '{{path.basename}}/overlays/prod'
+        path: '{{path.basename}}/overlays/main'
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{path.basename}}'
@@ -30,3 +30,9 @@ spec:
           prune: true
         syncOptions:
         - CreateNamespace=true
+        retry:
+          limit: 0
+          backoff:
+            duration: 5s
+            factor: 2
+            maxDuration: 3m

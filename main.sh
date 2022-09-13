@@ -2,25 +2,33 @@
 
 set -e
 
-ENVIRONMENT=$1
-export CLUSTER_ENV=dev
-if [ "$ENVIRONMENT" == "" ]; then
-  # Set the environment depending on the current branch
-  branch=$(git rev-parse --abbrev-ref HEAD)
-  if [ "$branch" == "main" ]; then
-    export ENVIRONMENT=prod
-    export CLUSTER_ENV=prod
-  elif [ "$branch" == "develop" ]; then
-    export ENVIRONMENT=dev
-  else
-    echo "Unknown branch: $branch"
-    exit 1
-  fi
+APP_ENV=$1
+export PLATFORM_ENV=dev
+
+# This determines what version of the platform we are using:
+# - develop is for developing the platform itself
+# - main is for developing applications on a stable version of the platform
+branch=$(git rev-parse --abbrev-ref HEAD)
+PLATFORM_ENV=$branch
+# if [ "$branch" == "main" ]; then
+#   export PLATFORM_ENV=prod
+# elif [ "$branch" == "develop" ]; then
+#   export PLATFORM_ENV=dev
+# else
+#   echo "Unknown branch: $branch"
+#   exit 1
+# fi
+
+# If an app environment was not provided, mimic the platform env.
+if [ "$APP_ENV" == "" ]; then
+  APP_ENV=$PLATFORM_ENV
 fi
-echo "Environment: $ENVIRONMENT"
+
+echo "Platform Environment: $PLATFORM_ENV"
+echo "Application Environment: $APP_ENV"
 
 # Create cluster
-./cluster.sh $ENVIRONMENT k3d
+./cluster.sh $APP_ENV k3d
 
 # Install argocd
-./argocd.sh $ENVIRONMENT
+./argocd.sh $APP_ENV $PLATFORM_ENV

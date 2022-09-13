@@ -14,4 +14,4 @@ spec:
     spec:
       source:
         targetRevision: develop
-        path: '{{path}}/overlays/dev'
+        path: '{{path}}/overlays/develop'

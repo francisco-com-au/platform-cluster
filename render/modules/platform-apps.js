@@ -1,4 +1,4 @@
-function platformApps(apps_repo, branch, env) {
+function platformApps(apps_repo, branch, apps_env) {
     return `---
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
@@ -22,7 +22,7 @@ spec:
       source:
         repoURL: https://github.com/${apps_repo}.git
         targetRevision: ${branch}
-        path: '{{path}}/overlays/${env}'
+        path: '{{path}}/overlays/${apps_env}'
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{path.basename}}'
@@ -32,6 +32,12 @@ spec:
           prune: true
         syncOptions:
         - CreateNamespace=true
+        retry:
+          limit: 0
+          backoff:
+            duration: 5s
+            factor: 2
+            maxDuration: 3m
 `
 };
 

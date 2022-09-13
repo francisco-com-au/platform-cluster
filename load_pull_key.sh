@@ -12,10 +12,11 @@ ls $FILE_NAME* || gcloud iam service-accounts keys create $FILE_NAME \
     --project $CONTAINER_REGISTRY_PROJECT
 
 # Make a .dockerconfigjson file with the key
-key_content=$(cat $FILE_NAME | sed -r 's/"/\\"/g') # escape quotes: "{"key": "value"}" > "{\"key\":\"value\"}"
-auth="{_json_key:$key_content}"
+key_content=$(cat $FILE_NAME)
+escaped_key_content=$(cat $FILE_NAME | sed -r 's/"/\\"/g') # escape quotes: "{"key": "value"}" > "{\"key\":\"value\"}"
+auth="_json_key:$key_content"
 auth64=$(echo -n $auth | base64)
-dockerconfigjson="{\"auths\":{\"https://gcr.io\":{\"username\":\"_json_key\",\"password\":\"$key_content\",\"auth\":\"$auth64\"}}}"
+dockerconfigjson="{\"auths\":{\"https://gcr.io\":{\"username\":\"_json_key\",\"password\":\"$escaped_key_content\",\"auth\":\"$auth64\"}}}"
 echo $dockerconfigjson > .dockerconfigjson
 
 # Load key into 1password
@@ -48,3 +49,9 @@ fi
 #         --docker-password="$(cat ./$FILE_NAME)"
 #     kubectl -n $NAMESPACE patch serviceaccount default -p '{"imagePullSecrets": [{"name": "container-registry-pull"}]}'
 # done
+
+# NAMESPACE=imagepullsecret-patcher
+# kubectl -n $NAMESPACE create secret docker-registry registry-credentials \
+#     --docker-server=https://gcr.io \
+#     --docker-username=_json_key \
+#     --docker-password="$(cat ./$FILE_NAME)"

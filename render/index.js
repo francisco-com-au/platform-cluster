@@ -5,9 +5,9 @@ const fs = require('fs');
 const platformApps = require('./modules/platform-apps');
 
 const apps_repo = process.env.APPS_REPO || "francisco-com-au/platform-apps";
-const branch = "main";
-const env = process.env.ENVIRONMENT || 'main';
+const APP_ENV = process.env.APP_ENV || 'main';
+const PLATFORM_ENV = process.env.PLATFORM_ENV || "main";
 
-const rendered = platformApps(apps_repo, branch, env);
+const rendered = platformApps(apps_repo, PLATFORM_ENV, APP_ENV);
 
 fs.writeFileSync('applicationSet.yaml', rendered);

@@ -2,16 +2,20 @@
 
 set -e
 
-ENVIRONMENT=$1
+APP_ENV=$1
+PLATFORM_ENV=$2
 
 PASSWORD=adminadmin
 PORT=9999
 
 # Render apps
-cp -r apps rendered
+rm -rf rendered
+mkdir rendered
+cp -r apps/ rendered/
 cd render
 export APPS_REPO="francisco-com-au/platform-apps"
-export ENVIRONMENT=$ENVIRONMENT
+export APP_ENV=$APP_ENV
+export PLATFORM_ENV=$PLATFORM_ENV
 node index.js
 cd ..
 mv render/applicationSet.yaml rendered/platform-apps/applicationSet.yaml
@@ -21,10 +25,10 @@ brew install kustomize
 
 # Install Argo CD on the cluster
 kubectl create namespace argocd
-kubectl -n argocd apply -k ./rendered/argocd/overlays/$CLUSTER_ENV # <- dev doesn't create an external ingress
+kubectl -n argocd apply -k ./rendered/argocd/overlays/$PLATFORM_ENV # <- dev doesn't create an external ingress
 
 # Install platform ops apps
-kubectl -n argocd apply -k ./rendered/platform-ops/overlays/$CLUSTER_ENV
+kubectl -n argocd apply -k ./rendered/platform-ops/overlays/$PLATFORM_ENV
 
 # Install Argo CD CLI
 brew install argocd
