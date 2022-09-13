@@ -1,5 +1,9 @@
 #!/bin/bash
 
+set -e
+
+eval $(op signin)
+
 # Fetch the core pipeline credentials
 op read "op://personal/Core Pipeline Credentials File/1password-credentials.json" \
     | base64 \

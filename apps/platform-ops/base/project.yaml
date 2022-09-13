@@ -36,6 +36,8 @@ spec:
     server: https://kubernetes.default.svc
   - namespace: one-password-install
     server: https://kubernetes.default.svc
+  - namespace: imagepullsecret-patcher
+    server: https://kubernetes.default.svc
   clusterResourceWhitelist:
   - group: '*'
     kind: '*'
