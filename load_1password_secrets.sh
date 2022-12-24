@@ -21,5 +21,5 @@ kubectl create secret generic op-credentials --from-file=1password-credentials.j
 rm 1password-credentials.json
 
 # Fetch the token
-OP_CONNECT_TOKEN=$(op read "op://personal/core pipeline access token - test/credential")
+OP_CONNECT_TOKEN=$(op read "op://personal/core pipeline access token - kubernetes/credential")
 kubectl create secret generic onepassword-token --from-literal=token=$OP_CONNECT_TOKEN  -n $NAMESPACE
