@@ -24,7 +24,7 @@ mv render/applicationSet.yaml rendered/platform-apps/applicationSet.yaml
 brew install kustomize
 
 # Install Argo CD on the cluster
-kubectl create namespace argocd
+kubectl create namespace argocd || echo ""
 kubectl -n argocd apply -k ./rendered/argocd/overlays/$PLATFORM_ENV # <- dev doesn't create an external ingress
 
 # Install platform ops apps

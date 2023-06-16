@@ -21,8 +21,15 @@ function type_k3d() {
     # Create cluster
     k3d cluster create \
         platform-$APP_ENV \
-        --registry-use k3d-platform-$APP_ENV.localhost:12345 \
-        --k3s-arg '--no-deploy=traefik@server:*' -p "80:80@loadbalancer" -p "443:443@loadbalancer"
+        -p "80:80@loadbalancer" -p "443:443@loadbalancer"
+        # --k3s-arg '--no-deploy=traefik@server:*' -p "80:80@loadbalancer" -p "443:443@loadbalancer"
+    
+    # Delete traefik (but first wait for it to be up)
+    until kubectl -n kube-system rollout status deployment traefik; do
+        sleep 5
+    done
+    kubectl -n kube-system delete deployment traefik
+    kubectl -n kube-system delete service traefik
 }
 
 if [ "$TYPE" == "k3d" ]; then

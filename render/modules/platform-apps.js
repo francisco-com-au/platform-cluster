@@ -38,6 +38,8 @@ spec:
             duration: 5s
             factor: 2
             maxDuration: 3m
+  syncPolicy:
+    preserveResourcesOnDeletion: false
 `
 };
 
