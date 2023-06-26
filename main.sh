@@ -32,3 +32,9 @@ echo "Application Environment: $APP_ENV"
 
 # Install argocd
 ./argocd.sh $APP_ENV $PLATFORM_ENV
+
+# Load 1password
+./load_1password_secrets.sh
+
+# Load pull keys
+./load_pull_key.sh

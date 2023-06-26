@@ -54,3 +54,5 @@ argocd account update-password --current-password $PASS --new-password $PASSWORD
 
 # Cleanup
 rm -rf rendered
+
+echo "Now you need to manually sync the cert manager app and the image patcher"
