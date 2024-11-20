@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bucket-ls
+  namespace: default
+spec:
+  replicas: 1  # You can adjust the replica count as needed
+  selector:
+    matchLabels:
+      app: bucket-ls
+  template:
+    metadata:
+      labels:
+        app: bucket-ls
+    spec:
+      serviceAccountName: bucket-ls
+      containers:
+      - name: bucket-ls
+        image: google/cloud-sdk:alpine
+        # command: ["/bin/sh", "-c", "gcloud auth login --cred-file $GOOGLE_APPLICATION_CREDENTIALS && gcloud auth list && sleep 600"]
+        command: ["/bin/sh", "-c", "gcloud auth login --cred-file $GOOGLE_APPLICATION_CREDENTIALS && while true; do gsutil ls gs://ab-aa-api-dev-test; sleep 5; done"]
+        volumeMounts:
+        - name: token
+          mountPath: "/var/run/service-account"
+          readOnly: true
+        - name: workload-identity-credential-configuration
+          mountPath: "/etc/workload-identity"
+          readOnly: true
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: "/etc/workload-identity/credential-configuration.json"
+      volumes:
+      - name: token
+        projected:
+          sources:
+          - serviceAccountToken:
+              audience: google-cloud.american-broomstick.com.au
+              # audience: https://iam.googleapis.com/projects/104656438482/locations/global/workloadIdentityPools/federated-pool-1732078275/providers/k3d-cluster
+              expirationSeconds: 3600
+              path: token
+      - name: workload-identity-credential-configuration
+        configMap:
+          name: gcp-workload-identity-config # Specify the ConfigMap for the credential configuration
